@@ -1,0 +1,5 @@
+SCOPE_Exp123_results*/
+.ipynb_checkpoints/
+__pycache__/
+*.aux
+*.log
