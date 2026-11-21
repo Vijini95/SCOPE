@@ -1,0 +1,27 @@
+Column,Procedure,Remarks
+1,SCOPE_Fixed_Normal,Consult METHOD_IMPLEMENTATION_NOTES.csv after run
+2,NSCOPE_Fixed_Normal_r1,Consult METHOD_IMPLEMENTATION_NOTES.csv after run
+3,SCOPE_SURE_Normal,Consult METHOD_IMPLEMENTATION_NOTES.csv after run
+4,NSCOPE_SURE_Normal,Consult METHOD_IMPLEMENTATION_NOTES.csv after run
+5,BAMS_Author_C2_Gamma2,"Author BAMS (Cscale=2, gamma=2, depth=J-3)"
+6,EBayesMedian,Consult METHOD_IMPLEMENTATION_NOTES.csv after run
+7,RaisedCosineBayes,Consult METHOD_IMPLEMENTATION_NOTES.csv after run
+8,EpanechnikovBayes,Consult METHOD_IMPLEMENTATION_NOTES.csv after run
+9,SmoothSCAD_stabilized_author,Consult METHOD_IMPLEMENTATION_NOTES.csv after run
+10,SureShrink_Hybrid,Consult METHOD_IMPLEMENTATION_NOTES.csv after run
+11,FDR_BH_q05,Consult METHOD_IMPLEMENTATION_NOTES.csv after run
+12,EBBlock_1D_proxy,Provisional EBBlock proxy
+13,BayesShrink_1D,Consult METHOD_IMPLEMENTATION_NOTES.csv after run
+14,NeighCoeff,Consult METHOD_IMPLEMENTATION_NOTES.csv after run
+15,NeighShrink_SURE_1D,Consult METHOD_IMPLEMENTATION_NOTES.csv after run
+16,SURELET_1D_orthonormal,Consult METHOD_IMPLEMENTATION_NOTES.csv after run
+17,BiShrink_1D,Consult METHOD_IMPLEMENTATION_NOTES.csv after run
+18,NeighBlock,Consult METHOD_IMPLEMENTATION_NOTES.csv after run
+19,SureBlock_hybrid_CZ09,Consult METHOD_IMPLEMENTATION_NOTES.csv after run
+20,BlockJS,Consult METHOD_IMPLEMENTATION_NOTES.csv after run
+21,Jeffreys_ABE_FigueiredoNowak,Consult METHOD_IMPLEMENTATION_NOTES.csv after run
+22,LocalWiener_1D,Consult METHOD_IMPLEMENTATION_NOTES.csv after run
+23,Context_CYV2000_1D,"Chang-Yu-Vetterli context, 1D adaptation"
+24,HMT_1D_EM_proxy,Provisional HMT proxy
+25,UniversalHard,Consult METHOD_IMPLEMENTATION_NOTES.csv after run
+26,UniversalSoft,Consult METHOD_IMPLEMENTATION_NOTES.csv after run

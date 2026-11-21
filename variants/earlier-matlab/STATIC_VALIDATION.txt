@@ -1,0 +1,12 @@
+STATIC SOURCE AUDIT -- SCOPE_Exp123_FINAL.m
+MATLAB execution was NOT available in this container. Pass means source/invariants only.
+PASS: one main entry point and 119 uniquely named MATLAB functions.
+PASS: canonical 26 Experiment III methods; positions verified against old ordering.
+PASS: Author BAMS depth J-j0 with Cscale=2 and gamma=2.
+PASS: CYV context in method 23, uses parent, neighbours, LS, grouping and soft threshold.
+PASS: BAMS/CYV replay migration with backup and stored-noise checks.
+PASS: experiment plotting flags on, and cross-N/SNR plot invoked after summary.
+PASS: SNR default [3 5 7] and j0=3 with Gaussian noise.
+NOT VERIFIED: Runtime in MATLAB, all competitor algorithm equivalence to publications.
+NEXT: Run RUN_SMOKE.m; inspect output figures before full M=1000.
+SHA256 976bab4752aaf742d37a266769701c1648e59d6c6e5c7efd1e75414e6e054ae9
