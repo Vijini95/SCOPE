@@ -1,0 +1,1118 @@
+
+\documentclass[11pt]{article}
+\usepackage[letterpaper,margin=0.95in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{graphicx}
+\usepackage[authoryear]{natbib}
+\usepackage{microtype}
+\usepackage[hidelinks]{hyperref}
+\usepackage{booktabs}
+\usepackage{lineno}
+\usepackage{tabularx}
+\usepackage{array}
+\linespread{1.1}
+\graphicspath{{SCOPE_Clean_Supp_Figures/}}
+
+\renewcommand{\thesection}{S\arabic{section}}
+\renewcommand{\thesubsection}{S\arabic{section}.\arabic{subsection}}
+\renewcommand{\thefigure}{S\arabic{figure}}
+\renewcommand{\thetable}{S\arabic{table}}
+\numberwithin{equation}{section}
+
+\usepackage{float}
+\newtheorem{theorem}{Theorem}
+\newtheorem{corollary}{Corollary}
+\DeclareMathOperator{\median}{median}
+\begin{document}
+\title{Supplementary Material for\\
+SCOPE: A Family of CDF-Based Wavelet Shrinkage Rules}
+\author{Dixon Vimalajeewa$^{1}$, Vijini Lakmini$^{2}$, Malith Premarathna$^{1}$,\\
+Fabrizio Ruggeri$^{3}$, and Brani Vidakovic$^{2}$\\[6pt]
+{\small $^{1}$Department of Statistics, University of Nebraska, Lincoln, NE 68588, USA}\\
+{\small $^{2}$Department of Statistics, Texas A\&M University, College Station, TX 77843, USA}\\
+{\small $^{3}$IMATI--CNR, 20133 Milano, Italy}}
+\date{November 2026}
+\maketitle
+
+\noindent
+This supplement accompanies the main article, which develops SCOPE and
+N-SCOPE, the calibration of fixed rules, and adaptive SURE selection.
+Section~\ref{sec:Bayes} gives the penalized-likelihood and generalized
+MAP interpretation of coefficientwise SCOPE,
+Section~\ref{supp:proof-scope} proves its structural properties, and
+Section~\ref{supp:additional-cdfs} records further CDF constructions.
+Section~\ref{sec:s4-calibration} states the calibration rule used for
+all reported results, and Section~\ref{sec:supp-simul} gives the complete
+numerical results of the root-SNR experiments. Throughout,
+$F^*(u)=2F(u)-1$ is the centered CDF of a symmetric unimodal law, and
+$\delta(x;\lambda,k)=x|F^*(\lambda x)|^k$, for $\lambda>0$, $k\geq0$.
+
+
+\section{Penalized-likelihood and MAP interpretation of SCOPE}
+\label{sec:Bayes}
+
+A complementary way to understand SCOPE shrinkage is through a Bayesian or penalized likelihood lens. This viewpoint is useful, but it must be stated carefully. For a coefficientwise SCOPE rule satisfying the conditions below, one can construct a symmetric penalty for which the SCOPE estimator is the exact penalized Gaussian estimator. Whether that penalty corresponds to a proper prior density is a separate question, and depends on the tail behavior of the rule. This distinction is important for the prototype rules studied in this paper and will also clarify the role of this section relative to the simulation study.
+
+The analysis below concerns coefficientwise SCOPE, which is the
+$r=0$ case of N-SCOPE introduced in Section~2.2 of the main article.
+For positive neighborhood radii, attenuation depends on several
+observed coefficients, so the scalar inverse construction used here
+does not directly apply.
+
+Throughout this section, let
+\begin{eqnarray}
+\delta(x;\lambda,k) = x\,|F^*(\lambda x)|^k,
+\qquad \lambda>0,\;\; k\ge 0,
+\label{eq:scope_bayes}
+\end{eqnarray}
+where $F^*(x)=2F(x)-1$ is the centered version of a continuous symmetric unimodal distribution function $F$.
+
+We assume throughout that for the chosen $F$, $\lambda$, and $k$, the map
+$x\mapsto \delta(x;\lambda,k)$ is strictly increasing on ${\mathbb R}$.
+From Section~2 of the main article, $\delta$ is continuous, odd, sign preserving, and satisfies
+\begin{eqnarray}
+|\delta(x;\lambda,k)| &\leq& |x|, \qquad x\in{\mathbb R},\\
+\frac{\delta(x;\lambda,k)}{x} &\longrightarrow& 1,
+\qquad |x|\to\infty .
+\end{eqnarray}
+
+
+Consider the Gaussian location model
+\begin{eqnarray}
+X \mid \theta \sim N(\theta,\sigma^2),
+\qquad \sigma^2>0.
+\label{eq:gauss_loc}
+\end{eqnarray}
+Since $\delta$ is continuous, odd, unbounded in both directions, and strictly increasing, it admits a continuous odd inverse
+\begin{eqnarray}
+h(\theta) = \delta^{-1}(\theta).
+\label{eq:h_inverse}
+\end{eqnarray}
+Because $|\delta(x)| \le |x|$, we have
+\begin{eqnarray}
+h(\theta) \ge \theta
+\qquad \mbox{for } \theta \ge 0.
+\label{eq:h_ge_theta}
+\end{eqnarray}
+
+\medskip
+\noindent
+\begin{theorem}
+\label{th:two}
+{\bf (Generalized MAP or penalty representation of SCOPE)}
+Let $\delta$ be a SCOPE rule of the form
+$$
+\delta(x)=x |F^*(\lambda x)|^k, \qquad \lambda>0,\quad k\geq 0,
+$$
+and assume that $\delta$ is continuous, odd, strictly increasing on ${\mathbb R}$, and satisfies
+$$
+|\delta(x)|\leq |x|,\qquad x\in{\mathbb R},
+$$
+together with
+$$
+\lim_{x\to\infty}\delta(x)=\infty,\qquad
+\lim_{x\to-\infty}\delta(x)=-\infty.
+$$
+Then $\delta$ is a one-to-one and onto map from ${\mathbb R}$ to ${\mathbb R}$, and hence it has a continuous, odd, strictly increasing inverse $h=\delta^{-1}$.
+Define
+\begin{equation}
+\label{eq:scope_penalty}
+\Psi(\theta)
+=
+\frac{1}{\sigma^2}
+\int_0^\theta \{h(u)-u\}\,du .
+\end{equation}
+Then the following statements hold.
+
+First, $\Psi$ is even and nondecreasing in $|\theta|$.
+
+Second, for each observed $x\in{\mathbb R}$, the criterion
+$$
+Q_x(\theta)=\frac{(x-\theta)^2}{2\sigma^2}+\Psi(\theta)
+$$
+has the unique global minimizer
+$$
+\widehat{\theta}(x)=\delta(x).
+$$
+Equivalently, under these assumptions, the SCOPE rule is an exact penalized Gaussian estimator. It may also be interpreted as a generalized MAP estimator under the formal prior
+\begin{eqnarray}
+\pi(\theta)\propto \exp\{-\Psi(\theta)\},
+\label{eq:formal_prior_scope}
+\end{eqnarray}
+which may be proper or improper.
+\end{theorem}
+
+\medskip
+\noindent
+\emph{Proof.}
+Since $\delta$ is odd and strictly increasing, its inverse $h$ is also odd and strictly increasing. Hence $h(u)-u$ is odd, so the integral in \eqref{eq:scope_penalty} defines an even function $\Psi$.
+
+Next, \eqref{eq:h_ge_theta} implies that $h(\theta)-\theta \ge 0$ for $\theta \ge 0$, hence
+\begin{eqnarray}
+\Psi'(\theta) = \frac{h(\theta)-\theta}{\sigma^2} \ge 0
+\qquad \mbox{for } \theta>0.
+\end{eqnarray}
+By oddness of $h(\theta)-\theta$, it follows that $\Psi'(\theta) \le 0$ for $\theta<0$. Therefore $\Psi$ is nondecreasing in $|\theta|$.
+
+Now fix $x \in \mathbb{R}$. Differentiating $Q_x(\theta)$ gives
+\begin{eqnarray}
+Q_x'(\theta)
+&=&
+\frac{\theta-x}{\sigma^2} + \Psi'(\theta)
+\nonumber \\
+&=&
+\frac{\theta-x}{\sigma^2} + \frac{h(\theta)-\theta}{\sigma^2}
+\nonumber \\
+&=&
+\frac{h(\theta)-x}{\sigma^2}.
+\label{eq:Qprime_scope}
+\end{eqnarray}
+Because $h$ is strictly increasing, $Q_x'(\theta)<0$ when $\theta<\delta(x)$, $Q_x'(\theta)=0$ when $\theta=\delta(x)$, and $Q_x'(\theta)>0$ when $\theta>\delta(x)$. Therefore $Q_x(\theta)$ decreases up to $\theta=\delta(x)$ and increases afterward. Hence $\delta(x)$ is the unique global minimizer of $Q_x(\theta)$.
+\hfill $\square$
+
+\medskip
+\noindent
+Theorem~\ref{th:two} establishes that every coefficientwise SCOPE rule satisfying its hypotheses is an exact penalized estimator under an even, nondecreasing in $|\theta|$ penalty. What is not automatic is that the formal prior in \eqref{eq:formal_prior_scope} is integrable.
+
+\medskip
+\noindent
+\begin{corollary}
+Under the assumptions of Theorem~\ref{th:two}, the formal prior \eqref{eq:formal_prior_scope} is symmetric and unimodal. It is a proper prior density if and only if
+\begin{eqnarray}
+\int_{-\infty}^{\infty} \exp\{-\Psi(\theta)\}\,d\theta < \infty .
+\label{eq:properness_int}
+\end{eqnarray}
+In particular, if there exist constants $\theta_0>0$ and $c>0$ such that
+\begin{eqnarray}
+h(\theta)-\theta \ge c
+\qquad \mbox{for all } \theta \ge \theta_0,
+\label{eq:proper_cond}
+\end{eqnarray}
+then the prior is proper.
+\end{corollary}
+
+\medskip
+\noindent
+\emph{Proof.}
+Symmetry follows from evenness of $\Psi$. Since $\Psi$ is nondecreasing in $|\theta|$, the function $\exp(-\Psi(\theta))$ is nonincreasing on $[0,\infty)$ and nondecreasing on $(-\infty,0]$, hence unimodal with mode at zero.
+
+Condition \eqref{eq:properness_int} is exactly the integrability requirement for a proper prior density. If \eqref{eq:proper_cond} holds, then for $\theta \ge \theta_0$,
+\begin{eqnarray}
+\Psi(\theta)
+&=&
+\Psi(\theta_0)
++
+\frac{1}{\sigma^2}\int_{\theta_0}^{\theta} \bigl(h(u)-u\bigr)\,du
+\nonumber \\
+&\ge&
+\Psi(\theta_0) + \frac{c}{\sigma^2}(\theta-\theta_0),
+\end{eqnarray}
+so $\Psi(\theta)$ grows at least linearly in the tails and $\exp(-\Psi(\theta))$ is integrable.
+\hfill $\square$
+
+\medskip
+\noindent
+The corollary shows that the corresponding coefficientwise SCOPE rule induces an even penalty that is nondecreasing in $|\theta|$,
+and hence a formal prior that is symmetric and unimodal when written in
+the form (\ref{eq:formal_prior_scope}). A positive lower bound on the inverse gap in the tails is sufficient for propriety. When the gap tends to zero, propriety depends on its accumulated integral in the penalty.
+
+\medskip
+\noindent
+\textbf{Example 1 (Uniform SCOPE: generalized MAP but not proper MAP).}
+For the uniform prototype,
+\begin{eqnarray}
+\delta(x;\lambda,k)
+=
+\left\{
+\begin{array}{ll}
+x\,|\lambda x|^k, & |\lambda x| \le 1, \\[1ex]
+x, & |\lambda x| > 1 .
+\end{array}
+\right.
+\label{eq:uniform_scope_here}
+\end{eqnarray}
+Hence $\delta(x)=x$ for all sufficiently large $|x|$, so its inverse satisfies
+\begin{eqnarray}
+h(\theta)=\theta
+\qquad \mbox{for all sufficiently large } |\theta|.
+\end{eqnarray}
+Therefore $\Psi'(\theta)=0$ in the tails, which implies that $\Psi(\theta)$ is eventually constant. The formal prior \eqref{eq:formal_prior_scope} is then necessarily improper. Thus the uniform SCOPE rule has an exact penalty representation and a generalized MAP interpretation, but not a proper-prior MAP interpretation.
+
+\medskip
+\noindent\textbf{Example 2 (Cauchy SCOPE: a proper prior case)}
+For the Cauchy prototype with $k>0$,
+\begin{eqnarray}
+\delta(x;\lambda,k)
+=
+x\left|\frac{2}{\pi}\arctan(\lambda x)\right|^k .
+\label{eq:cauchy_scope_here}
+\end{eqnarray}
+As $x \to \infty$,
+\begin{eqnarray}
+\arctan(\lambda x)
+=
+\frac{\pi}{2} - \frac{1}{\lambda x} + O(x^{-3}),
+\end{eqnarray}
+hence
+\begin{eqnarray}
+\frac{2}{\pi}\arctan(\lambda x)
+=
+1 - \frac{2}{\pi \lambda x} + O(x^{-3}).
+\end{eqnarray}
+Therefore
+\begin{eqnarray}
+\delta(x;\lambda,k)
+=
+x\left(1 - \frac{2}{\pi \lambda x} + O(x^{-3})\right)^k
+=
+x - \frac{2k}{\pi\lambda} + O(x^{-1})
+\qquad \mbox{as } x \to \infty .
+\label{eq:cauchy_tail_delta}
+\end{eqnarray}
+Inverting \eqref{eq:cauchy_tail_delta} gives
+\begin{eqnarray}
+h(\theta)
+=
+\theta + \frac{2k}{\pi\lambda} + O(\theta^{-1})
+\qquad \mbox{as } \theta \to \infty .
+\end{eqnarray}
+For $k>0$, this gives $h(\theta)-\theta \ge c$ for all sufficiently large $\theta$, for some $c>0$, and Corollary~1 shows that the induced prior is proper. Thus the Cauchy SCOPE rule is an exact MAP estimator under a proper symmetric unimodal prior.
+
+\medskip
+\noindent
+\textbf{Remark.}
+For the logistic and normal generators, $x-\delta(x)$ decays exponentially or faster as $x\to\infty$. Since $h(\theta)\sim\theta$ and $h(\theta)-\theta=h(\theta)-\delta(h(\theta))$, the inverse gap is integrable in the tail. The penalty therefore has a finite limit and the corresponding formal prior is improper.
+
+\medskip
+\noindent
+\medskip
+\noindent
+\textbf{Neighborhood SCOPE.}
+For $r>0$, N-SCOPE defines a multivariate mapping whose attenuation
+factors depend on overlapping neighborhoods. Although this mapping
+retains the sign-preservation and magnitude-contraction properties
+established in Section~2.2 of the main article, its Jacobian need not be
+symmetric. Thus, the scalar penalty construction of
+Theorem~\ref{th:two} does not establish a generalized MAP or a
+proper-prior MAP representation for N-SCOPE. Such a representation,
+if available under additional restrictions, requires a separate
+multivariate analysis.
+
+These penalty and generalized MAP interpretations clarify the
+coefficientwise SCOPE subclass but do not determine its tuning. In the
+numerical study, the generator is prespecified, while the adaptive procedures select the exponent and scale multiplier and adaptive N-SCOPE also selects the radius, with scales calibrated as described
+in Section~4 of the main article.
+
+
+
+
+\section{Proof of the structural properties of SCOPE}
+\label{supp:proof-scope}
+
+We prove Proposition~1 of the main article, under its standing assumption
+that $F^*$ is continuous, odd, nondecreasing, and satisfies
+$uF^*(u)>0$ for $u\ne0$ and $F^*(u)\to1$ as $u\to\infty$.
+By oddness of $F^*$,
+\begin{eqnarray*}
+\delta(-x;\lambda,k)
+&=&-x|F^*(-\lambda x)|^k
+=-x|F^*(\lambda x)|^k=-\delta(x;\lambda,k).
+\end{eqnarray*}
+The attenuation $|F^*(\lambda x)|^k$ belongs to $[0,1]$ and is strictly
+positive for $x\ne0$ when $k>0$; thus the rule preserves sign and satisfies
+$|\delta(x;\lambda,k)|\leq|x|$. The convention $|F^*(\lambda x)|^0\equiv1$
+covers $k=0$.
+
+For $x\geq0$, set $a(x)=[F^*(\lambda x)]^k$. Both $a(x)$ and $x$ are
+nonnegative and nondecreasing. If $0\leq x_1\leq x_2$, then
+\begin{eqnarray*}
+\delta(x_1;\lambda,k)=x_1a(x_1)
+\leq x_1a(x_2)\leq x_2a(x_2)=\delta(x_2;\lambda,k).
+\end{eqnarray*}
+Oddness extends monotonicity to the negative half-line and across zero.
+Continuity follows from that of $F^*$, while
+\begin{eqnarray*}
+\frac{\delta(x;\lambda,k)}{x}
+=|F^*(\lambda x)|^k\longrightarrow1,
+\qquad |x|\longrightarrow\infty,
+\end{eqnarray*}
+proves relative tail preservation. \hfill$\square$
+
+\section{Additional CDF constructions}
+\label{supp:additional-cdfs}
+
+The main article develops the logistic, uniform, and Cauchy prototypes
+and lists the normal, Laplace, and hyperbolic-secant generators. We
+record two further constructions not treated in the main text:
+an exponential-power continuum and mixtures of centered CDFs. For any
+smooth symmetric generator with $F^*(u)=c_Fu+o(u)$, $c_F>0$,
+\begin{eqnarray}
+\delta(x;\lambda,k)
+= c_F^k\lambda^k x|x|^k\{1+o(1)\},
+\qquad x\longrightarrow0,\quad k>0.
+\label{eq:supp-local-general}
+\end{eqnarray}
+Thus the local attenuation has order $k+1$ for every fixed regular
+generator, while the tail shape supplies an additional design choice.
+The following extensions are analytical examples; neither was separately
+benchmarked in Experiments I--III.
+
+\subsection{An exponential-power continuum}
+\label{supp:exponential-power}
+
+An additional class, not studied in the simulations, is generated by the
+exponential-power densities
+\begin{eqnarray}
+f_\beta(u)=\frac{\beta}{2\Gamma(1/\beta)}
+\exp\{-|u|^\beta\},\qquad \beta>0.
+\label{eq:supp-exp-power-density}
+\end{eqnarray}
+Their centered CDFs have the explicit representation
+\begin{eqnarray}
+F_\beta^*(u)
+=\operatorname{sgn}(u)\,
+\frac{\gamma(1/\beta,|u|^\beta)}{\Gamma(1/\beta)},
+\label{eq:supp-exp-power-cdf}
+\end{eqnarray}
+where $\gamma(a,z)=\int_0^z t^{a-1}e^{-t}\,dt$ denotes the lower
+incomplete gamma function. The corresponding SCOPE estimator is
+$\delta_\beta(x;\lambda,k)=x|F_\beta^*(\lambda x)|^k$.
+Here $\beta=1$ is Laplace and $\beta=2$ is normal up to scale;
+moreover, as $\beta\to\infty$, the generating distribution
+approaches the uniform law on $[-1,1]$. Thus a single parameter
+interpolates between several qualitatively different attenuation
+profiles without changing the SCOPE construction. The local slope is
+$c_\beta=\beta/\Gamma(1/\beta)$, so
+\eqref{eq:supp-local-general} applies to every fixed $\beta>0$.
+
+\subsection{Finite mixtures and multiscale attenuation}
+\label{supp:mixtures}
+
+Further flexibility is obtained by mixing centered CDFs. Let
+$F_1,\ldots,F_M$ be symmetric unimodal CDFs with a common center,
+let $\pi_m\geq0$ with $\sum_{m=1}^M\pi_m=1$, and put
+\begin{eqnarray}
+F_{\rm mix}^*(u)=\sum_{m=1}^M\pi_m F_m^*(u),
+\qquad
+\delta_{\rm mix}(x;\lambda,k)
+=x\left|\sum_{m=1}^M\pi_mF_m^*(\lambda x)\right|^k.
+\label{eq:supp-mixture-basic}
+\end{eqnarray}
+Because convex mixtures of centered symmetric unimodal CDFs remain
+centered symmetric unimodal CDFs, the resulting rule inherits the
+coefficientwise SCOPE structural properties. A more flexible version
+permits a distinct scale $\lambda_m>0$ for each component:
+\begin{eqnarray}
+\delta_{\rm mix}(x;\boldsymbol\pi,\boldsymbol\lambda,k)
+=x\left|\sum_{m=1}^M\pi_mF_m^*(\lambda_m x)\right|^k.
+\label{eq:supp-mixture-multiscale}
+\end{eqnarray}
+This is again an ordinary SCOPE rule for the centered CDF
+$\sum_m\pi_m F_m^*(\lambda_m\cdot)$, although its shape need not
+belong to any one original parametric family. In the representation of
+the attenuation profile as a mixture of ramps $\min(|u|/t,1)$
+(Theorem~1 of the main article, based on \citealp{Khintchine1938}), mixing generators mixes their mixing
+laws: if $G_m$ is the mixing law of $F_m$, the multiscale mixture has
+mixing law $\sum_m\pi_mG_m^{(\lambda_m)}$, where $G_m^{(\lambda_m)}$
+is the law of $T/\lambda_m$ for $T\sim G_m$.
+
+For differentiable generators with slopes $c_m=(F_m^*)'(0)$,
+the mixture has origin slope $\sum_m\pi_m\lambda_mc_m$;
+for $u>0$, its upper-tail deficit is the weighted sum of the
+component deficits. These relations show how a mixture can control
+both the central contraction and the persistence of attenuation
+into the tails. A component with slowly decaying tails may dominate
+the resulting tail behavior even when its mixture weight is modest.
+
+Figure~\ref{fig:supp-mixture-profiles} illustrates the idea with
+normal--normal and normal--logistic mixtures. Both use $k=3$,
+$\pi_1=\pi_2=1/2$, and component scales
+$\lambda_1=0.5$, $\lambda_2=1$. The logistic scale convention is
+$F^*(u)=\tanh(u)$, as in the main article. The figure is
+illustrative rather than a numerical denoising experiment.
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.95\linewidth]{Figs/SCOPE_Mixture_Profiles.pdf}
+\caption{Two illustrative centered-CDF mixture SCOPE rules compared with the
+identity mapping: normal--normal (left) and normal--logistic (right).
+Both use $k=3$, equal mixture weights, and scales $(0.5,1)$.
+The curves were regenerated directly from the defining formulas.}
+\label{fig:supp-mixture-profiles}
+\end{figure}
+
+
+
+
+\section{Calibration and risk estimation}\label{sec:s4-calibration}
+
+This section records the derivations behind the calibration of Section~4 of the main article and the rule used for every reported result.
+
+\subsection{Null risk of a central coefficient and its inversion}
+\label{sec:s4-null}
+In the orthonormal Gaussian sequence model $d_{j\ell}=\theta_{j\ell}+\sigma Z_{j\ell}$, the N-SCOPE estimate of a central coefficient is $\widehat\theta_{j\ell}=d_{j\ell}[F^*(\lambda_{j,r}S_{j\ell}(r))]^k$, with $S_{j\ell}(r)^2=m^{-1}\sum_{|h|\le r}d_{j,\ell+h}^2$ and $m=2r+1$. We assume $m\le2^{j_0}$ and periodic indexing within each level, so every window contains $m$ distinct coefficients. For $r>0$ each coefficient has its own moving window and its own attenuation factor; no common factor is applied to a disjoint block.
+
+If all $m$ true coefficients in the window vanish, write $Z_0=Z_{j\ell}$ and $V=\sum_{h\ne0}Z_{j,\ell+h}^2\sim\chi^2_{2r}$, independent of $Z_0$, so that $S_{j\ell}(r)^2/\sigma^2=(Z_0^2+V)/m$. With $U=Z_0^2+V\sim\chi^2_m$, spherical symmetry gives $E(Z_0^2\mid U)=U/m$. With $a=\lambda_{j,r}\sigma$, the standardized retained energy of the central coefficient is therefore
+\begin{equation}
+R_{F,r,k}(a)=E\!\left[\frac{U}{m}\left\{F^*\!\left(a\sqrt{\frac{U}{m}}\right)\right\}^{2k}\right]
+=\int_0^\infty\frac{u}{m}\left\{F^*\!\left(a\sqrt{\frac{u}{m}}\right)\right\}^{2k}
+\frac{u^{m/2-1}e^{-u/2}}{2^{m/2}\Gamma(m/2)}\,du .
+\label{eq:s4-null-integral}
+\end{equation}
+This calibration accounts for the central coefficient's own contribution to the window energy. For the six generators and any $k>0$, $R_{F,r,k}$ is continuous and strictly increasing in $a>0$, with $R_{F,r,k}(0+)=0$ and $R_{F,r,k}(\infty)=1$ by dominated convergence, since $0\le F^*\le1$ on $[0,\infty)$ and $E(U/m)=1$. The inverse $a_{F,r,k}(p)=R_{F,r,k}^{-1}(p)$, $0<p<1$, is computed by numerical quadrature of \eqref{eq:s4-null-integral} and a bracketed monotone root search; no observed data enter. For a rescaled generator $F_s(u)=F(u/s)$, $R_{F_s,r,k}(a)=R_{F,r,k}(a/s)$ and $a_{F_s,r,k}(p)=s\,a_{F,r,k}(p)$, so the calibrated rule does not depend on the scale convention of $F$; writing the logistic centered CDF as $\tanh(u)$ rather than $\tanh(u/2)$ changes $a$ but not the shrinkage. Because $R_{F,r,k}$ depends on $r$ through $m$, each radius needs its own inverse.
+
+\subsection{Level schedule and noise budgets}
+\label{sec:s4-energy}
+Write $B_N=(N/2)\eta(N)$ for the expected retained noise energy per shrunk level, in units of $\sigma^2$, with $\eta(N)$ defined in Section~4 of the main article. The anchor uses the normal generator with $k=5$, whose half-attenuation point is $q_5/\lambda$ with $q_5=\Phi^{-1}\{(1+2^{-1/5})/2\}=1.51627656\ldots$; matching it to $\sigma\sqrt{2\log N}$ \citep{DonohoJohnstone1994} gives $a_N=q_5/\sqrt{2\log N}$ and $\eta(N)=E[Z^2\{2\Phi(a_N|Z|)-1\}^{10}]$. The universal threshold serves only as this reference; it is not applied in the estimator. The experiments use the unrounded target $\eta_j=B_N/2^j$, which equals the schedule $\eta_j=\eta(N)2^{J-1-j}$ of the main article, so that
+\begin{equation}
+\lambda_{j,r}(F,k)=\frac{1}{\widehat\sigma}\,a_{F,r,k}\!\left(\frac{B_N}{2^j}\right).
+\label{eq:s4-direct}
+\end{equation}
+For known noise variance this gives the same expected total retained energy at each shrunk level, even though overlapping estimates are dependent: under the all-null model every estimated coefficient at level $j$ has the same second moment $\sigma^2R_{F,r,k}(\lambda_{j,r}\sigma)$, and linearity of expectation does not require independence, so the level total is $2^jR_{F,r,k}(\lambda_{j,r}\sigma)\sigma^2=B_N\sigma^2$. Substituting the finest-level MAD gives a plug-in calibration.
+
+The target must satisfy $\eta_j<1$ at every shrunk level; since $2^j$ is smallest at $j_0$, this holds if and only if $B_N<2^{j_0}$. For a requested starting level, increase $j_0$ until this holds, leaving coarser coefficients unchanged. Table~\ref{tab:s4-budgets} gives the budgets for the three sample sizes of the experiments and two larger ones.
+
+\begin{table}[H]
+\centering\small
+\caption{Unrounded budgets $B_N=(N/2)\eta(N)$, the coarsest target $B_N/8$ that $j_0=3$ would imply, and the smallest feasible $j_0\ge3$. The last two columns give the expected retained pure-noise energy under known $\sigma$, as a percentage of the total noise energy $N\sigma^2$, for the shrunk details and for all output coefficients including the $2^{j_0}$ unshrunk scaling coefficients.}
+\label{tab:s4-budgets}
+\setlength{\tabcolsep}{5pt}
+\begin{tabular}{rccccrr}
+\toprule
+$N$ & $\eta(N)$ & $B_N$ & $B_N/8$ & $j_0$ & Details (\%) & Total (\%) \\
+\midrule
+512  & 0.0136991 & 3.5070  & 0.4384 & 3 & 4.11 & 5.67 \\
+1024 & 0.0100267 & 5.1337  & 0.6417 & 3 & 3.51 & 4.29 \\
+2048 & 0.0074791 & 7.6586  & 0.9573 & 3 & 2.99 & 3.38 \\
+4096 & 0.0056728 & 11.6178 & 1.4522 & 4 & 2.27 & 2.66 \\
+8192 & 0.0043672 & 17.8879 & 2.2360 & 5 & 1.75 & 2.14 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\noindent
+The percentages follow from $\{(J-j_0)B_N+2^{j_0}\}/N$; at $N=1024$, each of the seven shrunk levels retains $5.13$ units of standardized noise energy. They describe pure-noise output, not the fraction of noise transmitted when an unknown signal is present, which for nonlinear shrinkage depends on the signal.
+
+\subsection{One target for all generators, radii, and exponents}
+\label{sec:s4-common}
+The calibration uses the same target $B_N/2^j$ for every generator $F$, radius $r$, and exponent $k$, but the solution $a_{F,r,k}(B_N/2^j)$ depends on all three. This is intentional: a common value of $\lambda$ would not produce common noise suppression when the tail of $F$, the distribution of the local energy, or the exponent changes. Null-risk matching places the candidates on the same noise scale while leaving their behavior at nonzero coefficients free to differ. As $r$ increases, the local root-mean-square of pure noise becomes less variable and the calibrated scale increases; an isolated large coefficient can nevertheless be attenuated more strongly at positive radius, while neighboring nonzero coefficients reinforce one another. Equal null risk therefore implies neither equal risk at nonzero coefficients nor the superiority of any radius or generator.
+
+The exponent need not be an integer; $k>0$ suffices because $0\le F^*\le1$ on $[0,\infty)$. By \eqref{eq:supp-local-general}, $k$ sets the order $k+1$ at which the estimate leaves zero. Since the scale is recalibrated for each $k$, the null-risk target does not by itself select an exponent for nonzero coefficients; fixed SCOPE uses $k=5$ as a prespecified convention.
+
+\subsection{SURE score and its diagonal derivative}
+\label{sec:s4-sure}
+For a candidate $(k,r,b)$ the scale is $\lambda_{j,r}(F,k,b)=b\,a_{F,r,k}(B_N/2^j)/\widehat\sigma$, so only the global multiplier $b$ moves; level-to-level differences stay fixed by $B_N/2^j$. With $S=S_{j\ell}(r)$, $\lambda=\lambda_{j,r}(F,k,b)$, $u=\lambda S$, and $w=[F^*(u)]^k$, and with the candidate scale held fixed,
+\begin{equation}
+\frac{\partial S}{\partial d_{j\ell}}=\frac{d_{j\ell}}{mS},\qquad
+\frac{\partial(d_{j\ell}w)}{\partial d_{j\ell}}
+=[F^*(u)]^k+\frac{k\lambda d_{j\ell}^2}{mS}[F^*(u)]^{k-1}(F^*)'(u),
+\label{eq:s4-sure-diagonal}
+\end{equation}
+which is the derivative used in Section~4 of the main article. It includes the effect of the central coefficient on its own window energy. Overlap creates off-diagonal partial derivatives, but Stein's divergence is the trace of the Jacobian and needs only the diagonal. At $S=0$ the derivative is defined by its limit; for the uniform generator, the derivative almost everywhere suffices under the continuous Gaussian model. In the implementation the MAD estimate $\widehat\sigma=\median_\ell|d_{J-1,\ell}|/0.67448975$ and the candidate scales are held fixed when evaluating \eqref{eq:s4-sure-diagonal}, and the summed score over all shrunk levels is minimized over $k\in\{3,5,7\}$, $b\in\{0.65,0.80,1.00,1.20,1.50\}$, and, for N-SCOPE SURE, $r\in\{0,1,2,3\}$. The selected triple is common to all detail levels of a realization. The criterion is therefore a plug-in score, not an exactly unbiased risk estimate for the procedure with estimated noise and selected parameters. Performance of the selected rule is evaluated on the simulated truths, using the same noisy observations for all competing procedures.
+
+\section{Additional numerical evidence for the simulation study}
+\label{sec:supp-simul}
+
+This section gives the numerical details behind Section~5 of the main article.
+All quantities below are taken from the completed $M=1000$ output for
+$N=512,1024,2048$ and \emph{root} SNR $3,5,7$.
+The MATLAB implementation multiplies the clean signal by its
+requested ratio of signal standard deviation to noise standard deviation,
+with independent noise $N(0,1)$. It does \emph{not} impose power SNR
+$N^{-1}\sum_i f(t_i)^2/\sigma^2$. The tables use the same periodic
+orthonormal wavelet transforms and leave eight scaling coefficients
+unshrunk. MSE is computed in wavelet coordinates and divided by $N$;
+Parseval's identity makes it identical to reconstruction MSE.
+
+\subsection{Calibration targets and finite-size conventions}
+\label{sec:supp-calib}
+The finest-level Gaussian null-risk targets are computed before seeing
+the signal. With $J=\log_2N$, the calibration uses
+$\eta_j=\eta(N)2^{J-1-j}$ for $j=3,\ldots,J-1$.
+The following table makes explicit how close the coarse target is to
+one at $N=2048$. The positive-radius constants are obtained separately
+for each generator, radius, exponent, and level by numerical inversion
+of the same $\chi^2_{2r+1}$ null-risk equation. The central coefficient
+alone is attenuated, even though its calibration uses neighborhood energy.
+
+\begin{table}[H]
+\centering\small
+\caption{Preassigned Gaussian null-risk targets; $j_0=3$ and $J=\log_2 N$. The coarsest target is $\eta_3(N)=2^{J-4}\eta(N)$, computed from the unrounded $\eta(N)$ of Table~\ref{tab:s4-budgets}. These are per-coefficient normalized null risks, not reconstruction MSEs.}
+\label{tab:s5-eta}
+\setlength{\tabcolsep}{5pt}
+\begin{tabular}{rrrrrr}
+\toprule
+$N$ & $J$ & Finest $j$ & $\eta(N)$ & Coarsest $\eta_3$ & Shrunk levels \\
+\midrule
+512 & 9 & 8 & 0.01370 & 0.4384 & 6 \\
+1024 & 10 & 9 & 0.01003 & 0.6417 & 7 \\
+2048 & 11 & 10 & 0.00748 & 0.9573 & 8 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Experiment I: all sizes and representative generating families}
+\label{sec:supp-e1}
+Tables~\ref{tab:s5-e1-normal-512}--\ref{tab:s5-e1-normal-2048}
+report \emph{all twelve} signal--root-SNR combinations for the Normal
+generator at each sample size. Corresponding logistic tables emphasize
+that the neighborhood pattern is not specific to a single centered
+CDF. Every row compares $r=0,1,2,3$ after independent null-risk
+calibration; no radius minimizes an oracle criterion. In particular,
+the Blocks penalty from positive radii should not be hidden by an
+aggregate score.
+
+\begin{table}[H]
+\centering\small
+\caption{Experiment I, Normal generator, $N=512$, $k=5$, $M=1000$: AMSE for fixed radii at all four signals and root SNR $3,5,7$.}
+\label{tab:s5-e1-normal-512}
+\setlength{\tabcolsep}{5pt}
+\begin{tabular}{llcccc}
+\toprule
+Signal & Root SNR & $r=0$ & $r=1$ & $r=2$ & $r=3$ \\
+\midrule
+Doppler & 3 & 0.2219 & 0.1820 & 0.1735 & 0.1762 \\
+Doppler & 5 & 0.2809 & 0.2141 & 0.1952 & 0.1933 \\
+Doppler & 7 & 0.3091 & 0.2285 & 0.2093 & 0.2065 \\
+HeaviSine & 3 & 0.0997 & 0.0979 & 0.1008 & 0.1029 \\
+HeaviSine & 5 & 0.1093 & 0.1120 & 0.1211 & 0.1283 \\
+HeaviSine & 7 & 0.1181 & 0.1241 & 0.1367 & 0.1477 \\
+Bumps & 3 & 0.4770 & 0.3837 & 0.4469 & 0.4946 \\
+Bumps & 5 & 0.5148 & 0.3709 & 0.4409 & 0.5099 \\
+Bumps & 7 & 0.5474 & 0.3617 & 0.4299 & 0.5021 \\
+Blocks & 3 & 0.2025 & 0.2786 & 0.3245 & 0.3600 \\
+Blocks & 5 & 0.1791 & 0.2758 & 0.3305 & 0.3795 \\
+Blocks & 7 & 0.1649 & 0.2655 & 0.3292 & 0.3774 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering\small
+\caption{Experiment I, Normal generator, $N=1024$, $k=5$, $M=1000$: AMSE for fixed radii at all four signals and root SNR $3,5,7$.}
+\label{tab:s5-e1-normal-1024}
+\setlength{\tabcolsep}{5pt}
+\begin{tabular}{llcccc}
+\toprule
+Signal & Root SNR & $r=0$ & $r=1$ & $r=2$ & $r=3$ \\
+\midrule
+Doppler & 3 & 0.1357 & 0.1132 & 0.1093 & 0.1112 \\
+Doppler & 5 & 0.1610 & 0.1331 & 0.1278 & 0.1290 \\
+Doppler & 7 & 0.1804 & 0.1489 & 0.1404 & 0.1398 \\
+HeaviSine & 3 & 0.0634 & 0.0650 & 0.0685 & 0.0713 \\
+HeaviSine & 5 & 0.0696 & 0.0737 & 0.0799 & 0.0852 \\
+HeaviSine & 7 & 0.0772 & 0.0808 & 0.0889 & 0.0957 \\
+Bumps & 3 & 0.2828 & 0.2252 & 0.2623 & 0.2964 \\
+Bumps & 5 & 0.3126 & 0.2356 & 0.2797 & 0.3218 \\
+Bumps & 7 & 0.3179 & 0.2422 & 0.2868 & 0.3311 \\
+Blocks & 3 & 0.1588 & 0.2210 & 0.2605 & 0.2904 \\
+Blocks & 5 & 0.1240 & 0.2021 & 0.2585 & 0.3021 \\
+Blocks & 7 & 0.1054 & 0.1847 & 0.2470 & 0.2914 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering\small
+\caption{Experiment I, Normal generator, $N=2048$, $k=5$, $M=1000$: AMSE for fixed radii at all four signals and root SNR $3,5,7$.}
+\label{tab:s5-e1-normal-2048}
+\setlength{\tabcolsep}{5pt}
+\begin{tabular}{llcccc}
+\toprule
+Signal & Root SNR & $r=0$ & $r=1$ & $r=2$ & $r=3$ \\
+\midrule
+Doppler & 3 & 0.0813 & 0.0723 & 0.0697 & 0.0702 \\
+Doppler & 5 & 0.0925 & 0.0828 & 0.0794 & 0.0789 \\
+Doppler & 7 & 0.1061 & 0.0897 & 0.0851 & 0.0843 \\
+HeaviSine & 3 & 0.0444 & 0.0460 & 0.0486 & 0.0506 \\
+HeaviSine & 5 & 0.0503 & 0.0523 & 0.0559 & 0.0591 \\
+HeaviSine & 7 & 0.0562 & 0.0576 & 0.0625 & 0.0668 \\
+Bumps & 3 & 0.1689 & 0.1393 & 0.1610 & 0.1811 \\
+Bumps & 5 & 0.1854 & 0.1541 & 0.1798 & 0.2046 \\
+Bumps & 7 & 0.1913 & 0.1614 & 0.1879 & 0.2157 \\
+Blocks & 3 & 0.0932 & 0.1309 & 0.1573 & 0.1765 \\
+Blocks & 5 & 0.0802 & 0.1259 & 0.1603 & 0.1880 \\
+Blocks & 7 & 0.0697 & 0.1177 & 0.1560 & 0.1873 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering\small
+\caption{Experiment I, Logistic generator, $N=512$, $k=5$, $M=1000$: AMSE for fixed radii at all four signals and root SNR $3,5,7$.}
+\label{tab:s5-e1-logistic-512}
+\setlength{\tabcolsep}{5pt}
+\begin{tabular}{llcccc}
+\toprule
+Signal & Root SNR & $r=0$ & $r=1$ & $r=2$ & $r=3$ \\
+\midrule
+Doppler & 3 & 0.2195 & 0.1812 & 0.1732 & 0.1759 \\
+Doppler & 5 & 0.2827 & 0.2159 & 0.1968 & 0.1947 \\
+Doppler & 7 & 0.3147 & 0.2327 & 0.2114 & 0.2072 \\
+HeaviSine & 3 & 0.0975 & 0.0958 & 0.0983 & 0.1001 \\
+HeaviSine & 5 & 0.1085 & 0.1108 & 0.1188 & 0.1253 \\
+HeaviSine & 7 & 0.1178 & 0.1233 & 0.1351 & 0.1454 \\
+Bumps & 3 & 0.4898 & 0.3958 & 0.4599 & 0.5038 \\
+Bumps & 5 & 0.5311 & 0.3824 & 0.4549 & 0.5257 \\
+Bumps & 7 & 0.5629 & 0.3704 & 0.4404 & 0.5151 \\
+Blocks & 3 & 0.2084 & 0.2829 & 0.3279 & 0.3621 \\
+Blocks & 5 & 0.1858 & 0.2826 & 0.3370 & 0.3869 \\
+Blocks & 7 & 0.1700 & 0.2716 & 0.3338 & 0.3841 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering\small
+\caption{Experiment I, Logistic generator, $N=1024$, $k=5$, $M=1000$: AMSE for fixed radii at all four signals and root SNR $3,5,7$.}
+\label{tab:s5-e1-logistic-1024}
+\setlength{\tabcolsep}{5pt}
+\begin{tabular}{llcccc}
+\toprule
+Signal & Root SNR & $r=0$ & $r=1$ & $r=2$ & $r=3$ \\
+\midrule
+Doppler & 3 & 0.1357 & 0.1127 & 0.1085 & 0.1101 \\
+Doppler & 5 & 0.1620 & 0.1335 & 0.1278 & 0.1287 \\
+Doppler & 7 & 0.1824 & 0.1496 & 0.1408 & 0.1401 \\
+HeaviSine & 3 & 0.0628 & 0.0641 & 0.0672 & 0.0696 \\
+HeaviSine & 5 & 0.0692 & 0.0731 & 0.0790 & 0.0839 \\
+HeaviSine & 7 & 0.0767 & 0.0804 & 0.0882 & 0.0948 \\
+Bumps & 3 & 0.2872 & 0.2290 & 0.2661 & 0.2998 \\
+Bumps & 5 & 0.3199 & 0.2393 & 0.2838 & 0.3268 \\
+Bumps & 7 & 0.3276 & 0.2449 & 0.2902 & 0.3358 \\
+Blocks & 3 & 0.1633 & 0.2252 & 0.2643 & 0.2935 \\
+Blocks & 5 & 0.1306 & 0.2096 & 0.2663 & 0.3115 \\
+Blocks & 7 & 0.1099 & 0.1899 & 0.2517 & 0.2972 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering\small
+\caption{Experiment I, Logistic generator, $N=2048$, $k=5$, $M=1000$: AMSE for fixed radii at all four signals and root SNR $3,5,7$.}
+\label{tab:s5-e1-logistic-2048}
+\setlength{\tabcolsep}{5pt}
+\begin{tabular}{llcccc}
+\toprule
+Signal & Root SNR & $r=0$ & $r=1$ & $r=2$ & $r=3$ \\
+\midrule
+Doppler & 3 & 0.0815 & 0.0720 & 0.0692 & 0.0695 \\
+Doppler & 5 & 0.0927 & 0.0827 & 0.0791 & 0.0785 \\
+Doppler & 7 & 0.1060 & 0.0900 & 0.0853 & 0.0843 \\
+HeaviSine & 3 & 0.0441 & 0.0456 & 0.0480 & 0.0498 \\
+HeaviSine & 5 & 0.0499 & 0.0518 & 0.0554 & 0.0584 \\
+HeaviSine & 7 & 0.0557 & 0.0572 & 0.0620 & 0.0662 \\
+Bumps & 3 & 0.1703 & 0.1401 & 0.1616 & 0.1817 \\
+Bumps & 5 & 0.1893 & 0.1556 & 0.1815 & 0.2067 \\
+Bumps & 7 & 0.1963 & 0.1633 & 0.1903 & 0.2185 \\
+Blocks & 3 & 0.0957 & 0.1331 & 0.1593 & 0.1783 \\
+Blocks & 5 & 0.0835 & 0.1296 & 0.1642 & 0.1922 \\
+Blocks & 7 & 0.0725 & 0.1211 & 0.1593 & 0.1908 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
+To summarize all six generators without privileging a single root-SNR
+condition, the following tables give the equal-weighted mean over
+root SNR $3,5,7$ of the \emph{percentage} gain in AMSE of fixed
+$r=1$ relative to fixed $r=0$, evaluated separately for each signal.
+A negative percentage means deterioration. Averaging percentages
+rather than raw squared errors avoids allowing the highest-signal
+conditions to dominate the summary.
+
+\begin{table}[H]
+\centering\small
+\caption{Experiment I, $N=512$: average AMSE reduction (\%) from fixed $r=1$ versus $r=0$, across root SNR $3,5,7$, for all centered-CDF generators; positive favors N-SCOPE.}
+\label{tab:s5-gain-512}
+\setlength{\tabcolsep}{5pt}
+\begin{tabular}{lrrrr}
+\toprule
+Generator & Doppler & HeaviSine & Bumps & Blocks \\
+\midrule
+Logistic & +22.4 & -1.7 & +27.1 & -49.2 \\
+Normal & +22.6 & -1.9 & +27.1 & -50.8 \\
+Laplace & +21.7 & -1.5 & +26.3 & -47.7 \\
+Sech & +22.2 & -1.6 & +26.9 & -48.4 \\
+Uniform & +24.1 & -2.2 & +29.2 & -52.7 \\
+Cauchy & +17.9 & -1.2 & +14.3 & -29.5 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering\small
+\caption{Experiment I, $N=1024$: average AMSE reduction (\%) from fixed $r=1$ versus $r=0$, across root SNR $3,5,7$, for all centered-CDF generators; positive favors N-SCOPE.}
+\label{tab:s5-gain-1024}
+\setlength{\tabcolsep}{5pt}
+\begin{tabular}{lrrrr}
+\toprule
+Generator & Doppler & HeaviSine & Bumps & Blocks \\
+\midrule
+Logistic & +17.5 & -4.2 & +23.6 & -57.1 \\
+Normal & +17.1 & -4.4 & +22.9 & -59.2 \\
+Laplace & +17.8 & -4.2 & +24.1 & -55.6 \\
+Sech & +17.7 & -4.2 & +23.9 & -56.2 \\
+Uniform & +17.0 & -4.9 & +23.1 & -62.8 \\
+Cauchy & +18.8 & -3.3 & +16.9 & -32.9 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering\small
+\caption{Experiment I, $N=2048$: average AMSE reduction (\%) from fixed $r=1$ versus $r=0$, across root SNR $3,5,7$, for all centered-CDF generators; positive favors N-SCOPE.}
+\label{tab:s5-gain-2048}
+\setlength{\tabcolsep}{5pt}
+\begin{tabular}{lrrrr}
+\toprule
+Generator & Doppler & HeaviSine & Bumps & Blocks \\
+\midrule
+Logistic & +12.5 & -3.4 & +17.4 & -53.8 \\
+Normal & +12.4 & -3.3 & +16.7 & -55.5 \\
+Laplace & +12.7 & -3.5 & +18.3 & -52.4 \\
+Sech & +12.6 & -3.4 & +17.9 & -53.0 \\
+Uniform & +12.9 & -3.2 & +16.6 & -59.2 \\
+Cauchy & +16.3 & -3.5 & +17.1 & -35.0 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
+\subsection{Experiment II: normalized risks and parameter selection}
+\label{sec:supp-e2}
+For each generator and each $N$, we compute the normalized
+$Q_N$, defined as the equal-weighted mean of twelve conditionwise AMSE ratios to universal hard thresholding, over the same twelve
+signal--root-SNR conditions. The two fixed procedures use $k=5$,
+$b=1$, and $r=0$ or $1$; SURE selects $(k,b)$ for ordinary SCOPE
+or $(k,r,b)$ for N-SCOPE. The generator itself is not optimized
+within a noisy realization. Each following table contains the complete
+six-generator comparison, rather than a selected winner.
+
+\begin{table}[H]
+\centering\small
+\caption{Experiment II, $N=512$: macro-averaged normalized AMSE $Q_N$ (universal-hard baseline $Q_N=1$) over twelve signal--root-SNR conditions.}
+\label{tab:s5-e2-q-512}
+\setlength{\tabcolsep}{5pt}
+\begin{tabular}{lrrrr}
+\toprule
+Generator & Fixed SCOPE & Fixed N-SCOPE & SCOPE SURE & N-SCOPE SURE \\
+\midrule
+Logistic & 0.7210 & 0.7467 & 0.6862 & 0.6181 \\
+Normal & 0.7105 & 0.7377 & 0.6816 & 0.6106 \\
+Laplace & 0.7486 & 0.7766 & 0.6965 & 0.6326 \\
+Sech & 0.7312 & 0.7570 & 0.6910 & 0.6247 \\
+Uniform & 0.7239 & 0.7444 & 0.7197 & 0.6333 \\
+Cauchy & 1.2747 & 1.3352 & 0.9881 & 0.9285 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering\small
+\caption{Experiment II, $N=1024$: macro-averaged normalized AMSE $Q_N$ (universal-hard baseline $Q_N=1$) over twelve signal--root-SNR conditions.}
+\label{tab:s5-e2-q-1024}
+\setlength{\tabcolsep}{5pt}
+\begin{tabular}{lrrrr}
+\toprule
+Generator & Fixed SCOPE & Fixed N-SCOPE & SCOPE SURE & N-SCOPE SURE \\
+\midrule
+Logistic & 0.7534 & 0.8189 & 0.7090 & 0.6425 \\
+Normal & 0.7412 & 0.8089 & 0.7005 & 0.6328 \\
+Laplace & 0.7843 & 0.8533 & 0.7255 & 0.6610 \\
+Sech & 0.7649 & 0.8306 & 0.7159 & 0.6502 \\
+Uniform & 0.7461 & 0.8145 & 0.7179 & 0.6406 \\
+Cauchy & 1.3527 & 1.4488 & 1.0781 & 1.0099 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering\small
+\caption{Experiment II, $N=2048$: macro-averaged normalized AMSE $Q_N$ (universal-hard baseline $Q_N=1$) over twelve signal--root-SNR conditions.}
+\label{tab:s5-e2-q-2048}
+\setlength{\tabcolsep}{5pt}
+\begin{tabular}{lrrrr}
+\toprule
+Generator & Fixed SCOPE & Fixed N-SCOPE & SCOPE SURE & N-SCOPE SURE \\
+\midrule
+Logistic & 0.8121 & 0.8974 & 0.7441 & 0.6727 \\
+Normal & 0.8025 & 0.8891 & 0.7316 & 0.6614 \\
+Laplace & 0.8381 & 0.9270 & 0.7631 & 0.6929 \\
+Sech & 0.8215 & 0.9074 & 0.7529 & 0.6815 \\
+Uniform & 0.8104 & 0.8958 & 0.7378 & 0.6601 \\
+Cauchy & 1.3689 & 1.4847 & 1.1559 & 1.0839 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
+Next we report the probability distribution of the \emph{selected}
+N-SCOPE SURE radius at each sample size, pooled equally across the
+three root-SNR settings. Since $M=1000$ per setting, these are
+frequencies over 3000 independent simulated reconstructions for each
+signal and generator. The radius is one global parameter for a
+reconstruction; it is not a separate block decision.
+
+\begin{table}[H]
+\centering\small
+\caption{Experiment II, $N=512$: N-SCOPE SURE selected-radius frequencies (\%) pooled over root SNR $3,5,7$. Each row sums to approximately $100\%$.}
+\label{tab:s5-radius-512}
+\setlength{\tabcolsep}{5pt}
+\begin{tabular}{llrrrr}
+\toprule
+Generator & Signal & $r=0$ & $r=1$ & $r=2$ & $r=3$ \\
+\midrule
+Normal & Doppler & 0.1 & 7.0 & 35.8 & 57.1 \\
+Normal & HeaviSine & 41.5 & 37.3 & 11.4 & 9.9 \\
+Normal & Bumps & 3.8 & 96.2 & 0.0 & 0.0 \\
+Normal & Blocks & 99.9 & 0.1 & 0.0 & 0.0 \\
+Logistic & Doppler & 0.2 & 7.4 & 36.3 & 56.1 \\
+Logistic & HeaviSine & 40.9 & 38.1 & 11.0 & 10.0 \\
+Logistic & Bumps & 3.5 & 96.5 & 0.0 & 0.0 \\
+Logistic & Blocks & 99.9 & 0.1 & 0.0 & 0.0 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering\small
+\caption{Experiment II, $N=1024$: N-SCOPE SURE selected-radius frequencies (\%) pooled over root SNR $3,5,7$. Each row sums to approximately $100\%$.}
+\label{tab:s5-radius-1024}
+\setlength{\tabcolsep}{5pt}
+\begin{tabular}{llrrrr}
+\toprule
+Generator & Signal & $r=0$ & $r=1$ & $r=2$ & $r=3$ \\
+\midrule
+Normal & Doppler & 0.0 & 5.9 & 42.6 & 51.5 \\
+Normal & HeaviSine & 54.9 & 34.4 & 7.2 & 3.5 \\
+Normal & Bumps & 0.2 & 99.8 & 0.0 & 0.0 \\
+Normal & Blocks & 100.0 & 0.0 & 0.0 & 0.0 \\
+Logistic & Doppler & 0.0 & 5.6 & 42.0 & 52.4 \\
+Logistic & HeaviSine & 55.2 & 34.0 & 7.3 & 3.5 \\
+Logistic & Bumps & 0.1 & 99.9 & 0.0 & 0.0 \\
+Logistic & Blocks & 100.0 & 0.0 & 0.0 & 0.0 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering\small
+\caption{Experiment II, $N=2048$: N-SCOPE SURE selected-radius frequencies (\%) pooled over root SNR $3,5,7$. Each row sums to approximately $100\%$.}
+\label{tab:s5-radius-2048}
+\setlength{\tabcolsep}{5pt}
+\begin{tabular}{llrrrr}
+\toprule
+Generator & Signal & $r=0$ & $r=1$ & $r=2$ & $r=3$ \\
+\midrule
+Normal & Doppler & 0.1 & 1.7 & 20.3 & 77.9 \\
+Normal & HeaviSine & 60.3 & 34.8 & 3.6 & 1.3 \\
+Normal & Bumps & 0.2 & 99.8 & 0.0 & 0.0 \\
+Normal & Blocks & 100.0 & 0.0 & 0.0 & 0.0 \\
+Logistic & Doppler & 0.1 & 1.6 & 19.7 & 78.6 \\
+Logistic & HeaviSine & 61.0 & 33.9 & 3.8 & 1.4 \\
+Logistic & Bumps & 0.1 & 99.8 & 0.0 & 0.0 \\
+Logistic & Blocks & 100.0 & 0.0 & 0.0 & 0.0 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
+The pooled radius frequencies summarize selection across replications and signal strengths. The SURE-selected exponent $k$ and scale multiplier $b$ are available as replication-specific records in the numerical data accompanying this supplement, together with the joint frequencies of the selected triples; these are tuning diagnostics, not posterior probabilities or hypothesis tests.
+% CONFIRM (authors): these records are in the public repository; otherwise delete the previous sentence. Because $\widehat\sigma$ is estimated
+from the same sample and its derivative is held fixed, the criterion
+is plug-in SURE and is not exactly unbiased after selection.
+
+The selection frequencies agree with the AMSEs. In Experiment~II at $N=1024$ and root SNR~$5$, a fixed radius $r=1$ already gives nearly the full gain on Bumps (AMSE $0.2356$ versus $0.2351$ with joint adaptation), and N-SCOPE SURE selects $r=1$ in nearly every realization. For Blocks, where $r=0$ is selected almost always, allowing radius zero recovers the coefficientwise AMSE of $0.1211$, compared with $0.2021$ for fixed $r=1$. Doppler, which mostly selects $r=2$ or $3$, gains further from joint adaptation, whereas coefficientwise SURE performs slightly better on HeaviSine, where the selected radius varies most. Because each signal is analyzed with its own wavelet, these are findings for the tested signal--wavelet combinations.
+
+\subsection{Experiment III: complete implementation-level rankings}
+\label{sec:supp-e3}
+Experiment III uses fresh Gaussian-noise streams and four frozen
+Normal-generator SCOPE procedures alongside twenty literature-based
+codes and universal hard/soft references. The following ranking table
+includes \emph{every executed code}, with each $Q_N$ calculated
+separately from the twelve signal--root-SNR conditions for that $N$.
+The HMT, context and EB-block entries designated as proxies are not
+validated implementations of their cited published algorithms;
+additional implementation-specific qualifications are reported below.
+No apparent proxy advantage may be represented as a verified
+published-method comparison.
+
+\begin{table}[H]
+\centering\small
+\caption{Experiment III: all 26 executed procedures, with descriptive macro-average normalized AMSE $Q_N$ across four signals and three root-SNR conditions for each $N$. A dagger denotes an implementation requiring audit; a double dagger denotes a provisional proxy and \emph{not} the exact original literature method. Numbers match the comparator table of the main article; citations identify the target methods. These results describe executed codes, not verified comparative performance of the original published algorithms.}
+\label{tab:s5-e3-ranking}
+\setlength{\tabcolsep}{5pt}
+\begin{tabular}{r p{.58\linewidth}rrr}
+\toprule
+No. & Procedure and source & $N=512$ & $N=1024$ & $N=2048$ \\
+\midrule
+1 & Fixed SCOPE (normal; $r=0$) & 0.7100 & 0.7413 & 0.8004 \\
+2 & Fixed N-SCOPE (normal; $r=1$) & 0.7368 & 0.8078 & 0.8855 \\
+3 & SCOPE SURE (normal) & 0.6813 & 0.7003 & 0.7308 \\
+4 & N-SCOPE SURE (normal) & 0.6100 & 0.6328 & 0.6599 \\
+5 & BAMS$^{\dagger}$ \citep{VidakovicRuggeri2001} & --- & --- & --- \\
+6 & EBayesThresh posterior median$^{\dagger}$ \citep{JohnstoneSilverman2005EBayes} & 0.7379 & 0.7499 & 0.7754 \\
+7 & Raised-cosine Bayes$^{\dagger}$ \citep{ReinaSousa2026RaisedCosine} & 0.7550 & 0.8167 & 0.9181 \\
+8 & Epanechnikov Bayes (1D)$^{\dagger}$ \citep{BarriosSousa2025Epanechnikov} & 1.0837 & 0.9884 & 0.9013 \\
+9 & Smooth SCAD (stabilized)$^{\dagger}$ \citep{KulkarniEtAl2026SmoothSCAD} & 0.7572 & 0.7457 & 0.7616 \\
+10 & SureShrink (hybrid)$^{\dagger}$ \citep{DonohoJohnstone1995} & 1.0195 & 1.1210 & 1.1954 \\
+11 & FDR ($q=0.05$)$^{\dagger}$ \citep{AbramovichEtAl2006FDR} & 0.8759 & 0.8816 & 0.9049 \\
+12 & Empirical Bayes block (1D)$^{\ddagger}$ \citep{AbramovichBesbeasSapatinas2002BlockEB} & 1.0550 & 1.2282 & 1.4430 \\
+13 & BayesShrink (1D)$^{\dagger}$ \citep{ChangYuVetterli2000BayesShrink} & 1.0379 & 1.2439 & 1.4118 \\
+14 & NeighCoeff$^{\dagger}$ \citep{CaiSilverman2001Neigh} & 0.9937 & 1.0552 & 1.0831 \\
+15 & NeighShrink--SURE (1D)$^{\dagger}$ \citep{ZhouCheng2008NeighShrinkSURE} & 0.7685 & 0.8269 & 0.8549 \\
+16 & SURE-LET (1D two-term)$^{\dagger}$ \citep{BluLuisier2007SURELET} & 0.8550 & 0.8695 & 0.8947 \\
+17 & Sendur--Selesnick BiShrink (1D)$^{\dagger}$ \citep{SendurSelesnick2002BiShrink} & 0.7664 & 0.8763 & 1.0191 \\
+18 & NeighBlock$^{\dagger}$ \citep{CaiSilverman2001Neigh} & 1.3614 & 1.3977 & 1.3404 \\
+19 & SureBlock (hybrid)$^{\dagger}$ \citep{CaiZhou2009SureBlock} & 0.8027 & 0.8484 & 0.8669 \\
+20 & BlockJS$^{\dagger}$ \citep{Cai1999BlockJS} & 1.5494 & 1.5962 & 1.7023 \\
+21 & Jeffreys-prior EB (1D)$^{\dagger}$ \citep{FigueiredoNowak2001Jeffreys} & 0.8105 & 0.9557 & 1.2298 \\
+22 & Local Bayesian Wiener (1D)$^{\dagger}$ \citep{MihcakEtAl1999LocalWiener} & 1.0029 & 1.2883 & 1.6887 \\
+23 & Context-based shrinkage (1D)$^{\ddagger}$ \citep{ChangYuVetterli2000Context} & 1.1050 & 1.3465 & 1.5992 \\
+24 & Hidden Markov tree (1D EM)$^{\ddagger}$ \citep{CrouseNowakBaraniuk1998HMT} & 0.6094 & 0.6022 & 0.6220 \\
+25 & Universal hard threshold \citep{DonohoJohnstone1994} & 1.0000 & 1.0000 & 1.0000 \\
+26 & Universal soft threshold \citep{DonohoJohnstone1994} & 3.1239 & 3.4744 & 3.7599 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
+An aggregate can disguise signal-specific reversals. To document the
+underlying conditions, the next three tables provide the four SCOPE
+recipes plus three comparator codes, including one explicitly
+identified HMT proxy, for \emph{every} signal and root-SNR setting at
+all three sizes. These numerical comparisons do not use the test
+signal for selection. The full 26-code condition-specific tables,
+including replication-level MSEs and paired differences, are provided
+with the machine-readable outputs.
+% CONFIRM (authors): these files are in the public repository. If they hold the paired
+% differences, the TODO table in the precision subsection can be filled from them directly.
+BAMS estimates are withheld pending verification, consistently with the main article.
+
+\begin{table}[H]
+\centering\small
+\caption{Experiment III, $N=512$: AMSE for each signal and root SNR; independent $M=1000$ paired replications. EBayes and NeighShrink-SURE require implementation audit; HMT is a provisional proxy.}
+\label{tab:s5-e3-amse-512}
+\setlength{\tabcolsep}{5pt}
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{llrrrrrrr}
+\toprule
+Signal & SNR & Fixed S & Fixed N & S-SURE & N-SURE & EB med. & NeighS & HMT proxy \\
+\midrule
+Doppler & 3 & 0.2238 & 0.1832 & 0.2315 & 0.1802 & 0.2548 & 0.1823 & 0.2180 \\
+Doppler & 5 & 0.2843 & 0.2158 & 0.2843 & 0.2007 & 0.3174 & 0.1965 & 0.2584 \\
+Doppler & 7 & 0.3086 & 0.2281 & 0.3020 & 0.2079 & 0.3383 & 0.2060 & 0.2705 \\
+HeaviSine & 3 & 0.0970 & 0.0951 & 0.0875 & 0.0845 & 0.0854 & 0.0955 & 0.1052 \\
+HeaviSine & 5 & 0.1097 & 0.1127 & 0.1062 & 0.1090 & 0.1041 & 0.1197 & 0.1061 \\
+HeaviSine & 7 & 0.1186 & 0.1240 & 0.1152 & 0.1189 & 0.1214 & 0.1355 & 0.1191 \\
+Bumps & 3 & 0.4764 & 0.3814 & 0.4176 & 0.3783 & 0.4581 & 0.3916 & 0.3792 \\
+Bumps & 5 & 0.5114 & 0.3689 & 0.4479 & 0.3635 & 0.4892 & 0.3808 & 0.3933 \\
+Bumps & 7 & 0.5421 & 0.3570 & 0.4690 & 0.3532 & 0.5052 & 0.3705 & 0.3956 \\
+Blocks & 3 & 0.2042 & 0.2797 & 0.2050 & 0.2050 & 0.2250 & 0.3020 & 0.1406 \\
+Blocks & 5 & 0.1793 & 0.2751 & 0.1791 & 0.1791 & 0.1990 & 0.2970 & 0.1465 \\
+Blocks & 7 & 0.1617 & 0.2628 & 0.1627 & 0.1627 & 0.1837 & 0.2870 & 0.1208 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering\small
+\caption{Experiment III, $N=1024$: AMSE for each signal and root SNR; independent $M=1000$ paired replications. EBayes and NeighShrink-SURE require implementation audit; HMT is a provisional proxy.}
+\label{tab:s5-e3-amse-1024}
+\setlength{\tabcolsep}{5pt}
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{llrrrrrrr}
+\toprule
+Signal & SNR & Fixed S & Fixed N & S-SURE & N-SURE & EB med. & NeighS & HMT proxy \\
+\midrule
+Doppler & 3 & 0.1356 & 0.1134 & 0.1399 & 0.1032 & 0.1441 & 0.1068 & 0.1189 \\
+Doppler & 5 & 0.1618 & 0.1334 & 0.1648 & 0.1245 & 0.1779 & 0.1253 & 0.1447 \\
+Doppler & 7 & 0.1804 & 0.1493 & 0.1821 & 0.1384 & 0.1974 & 0.1374 & 0.1639 \\
+HeaviSine & 3 & 0.0632 & 0.0647 & 0.0503 & 0.0509 & 0.0511 & 0.0592 & 0.0607 \\
+HeaviSine & 5 & 0.0699 & 0.0740 & 0.0572 & 0.0597 & 0.0606 & 0.0723 & 0.0598 \\
+HeaviSine & 7 & 0.0780 & 0.0814 & 0.0688 & 0.0710 & 0.0724 & 0.0835 & 0.0730 \\
+Bumps & 3 & 0.2826 & 0.2253 & 0.2740 & 0.2243 & 0.2965 & 0.2419 & 0.2385 \\
+Bumps & 5 & 0.3127 & 0.2348 & 0.2911 & 0.2347 & 0.3168 & 0.2427 & 0.2413 \\
+Bumps & 7 & 0.3193 & 0.2428 & 0.2946 & 0.2460 & 0.3239 & 0.2474 & 0.2589 \\
+Blocks & 3 & 0.1594 & 0.2211 & 0.1583 & 0.1583 & 0.1662 & 0.2326 & 0.1012 \\
+Blocks & 5 & 0.1251 & 0.2027 & 0.1220 & 0.1220 & 0.1275 & 0.2184 & 0.0779 \\
+Blocks & 7 & 0.1054 & 0.1844 & 0.1037 & 0.1037 & 0.1184 & 0.2040 & 0.0718 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering\small
+\caption{Experiment III, $N=2048$: AMSE for each signal and root SNR; independent $M=1000$ paired replications. EBayes and NeighShrink-SURE require implementation audit; HMT is a provisional proxy.}
+\label{tab:s5-e3-amse-2048}
+\setlength{\tabcolsep}{5pt}
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{llrrrrrrr}
+\toprule
+Signal & SNR & Fixed S & Fixed N & S-SURE & N-SURE & EB med. & NeighS & HMT proxy \\
+\midrule
+Doppler & 3 & 0.0815 & 0.0725 & 0.0811 & 0.0580 & 0.0804 & 0.0614 & 0.0755 \\
+Doppler & 5 & 0.0932 & 0.0835 & 0.0927 & 0.0707 & 0.0972 & 0.0722 & 0.0821 \\
+Doppler & 7 & 0.1062 & 0.0900 & 0.1081 & 0.0754 & 0.1156 & 0.0773 & 0.0998 \\
+HeaviSine & 3 & 0.0439 & 0.0456 & 0.0274 & 0.0285 & 0.0302 & 0.0357 & 0.0318 \\
+HeaviSine & 5 & 0.0506 & 0.0524 & 0.0366 & 0.0377 & 0.0401 & 0.0457 & 0.0395 \\
+HeaviSine & 7 & 0.0555 & 0.0571 & 0.0457 & 0.0465 & 0.0490 & 0.0532 & 0.0515 \\
+Bumps & 3 & 0.1690 & 0.1390 & 0.1700 & 0.1408 & 0.1802 & 0.1465 & 0.1395 \\
+Bumps & 5 & 0.1854 & 0.1543 & 0.1850 & 0.1557 & 0.2007 & 0.1557 & 0.1560 \\
+Bumps & 7 & 0.1913 & 0.1610 & 0.1898 & 0.1618 & 0.2101 & 0.1602 & 0.1711 \\
+Blocks & 3 & 0.0932 & 0.1310 & 0.0927 & 0.0927 & 0.0953 & 0.1408 & 0.0558 \\
+Blocks & 5 & 0.0806 & 0.1264 & 0.0802 & 0.0802 & 0.0805 & 0.1351 & 0.0432 \\
+Blocks & 7 & 0.0702 & 0.1182 & 0.0654 & 0.0654 & 0.0713 & 0.1243 & 0.0403 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
+\subsection{Precision, reproducibility, and comparator audit}
+\label{sec:supp-precision}
+The Monte Carlo standard error of each AMSE is the standard deviation
+of its replication-level MSE divided by $\sqrt{1000}$.
+Paired standard errors use the standard deviation of
+\emph{within-replication} differences divided by $\sqrt{1000}$.
+A conventional descriptive $95\%$ Monte Carlo interval for the
+expected MSE difference is its sample mean plus or minus $1.96$
+paired standard errors.
+% TODO (authors): insert the paired-difference table here before submission.
+% For N=1024 (and, if space permits, N=512 and 2048), each signal, and root SNR 3,5,7,
+% report mean(L_A - L_B) and sd(L_A - L_B)/sqrt(1000) over the 1000 replications for
+%   A = N-SCOPE SURE, B = NeighShrink--SURE (1D)   [closest comparator; Doppler gap 0.0008 at SNR 5]
+%   A = N-SCOPE SURE, B = SCOPE SURE               [source of the ~10% aggregate gain]
+% MATLAB, with LA, LB the 1000-by-1 vectors of replication MSEs:
+%   d = LA - LB;  m = mean(d);  se = std(d)/sqrt(numel(d));  ci = m + [-1.96 1.96]*se;
+% Suggested layout (Table S-paired):
+%   Signal & SNR & NS-SURE - NeighShrink (SE) & NS-SURE - SCOPE SURE (SE) \\
+These intervals quantify Monte Carlo
+precision conditional on the simulation design, not robustness to
+other signal families or noise models. Where figures average
+percentage gains across SNR, the average is a descriptive summary
+and no pooled confidence interval is inferred without the
+corresponding replication-level calculation.
+
+The comparison set includes algorithmic modifications. For example,
+the SureShrink code includes a sparse-level hybrid fallback, the
+Smooth SCAD implementation includes an author-specified stabilization,
+and the LET comparator uses a one-dimensional orthonormal two-term rule
+rather than the original image-oriented method. The hidden-Markov-tree,
+context, and empirical-Bayes-block codes are explicitly flagged as
+provisional proxies. The SURE-LET, SureBlock, and Jeffreys-prior codes
+are modified one-dimensional implementations; together with the three
+proxies, they form the group that the comparator table of the main
+article describes as provisional or modified.  The primary conclusions
+in Section~5 of the main article are about SCOPE's morphology-dependent
+behavior and the value of non-oracle adaptation, not publication-level
+claims of superiority over any unverified literature method.
+
+
+\bibliographystyle{apalike}
+\bibliography{references}
+
+
+\end{document}
