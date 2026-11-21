@@ -1,0 +1,23 @@
+Source: SCOPE_Exp123_results_BNrounded.zip, 1000 runs per condition.
+Current manuscript Table Experiment III at N=1024 retains the same 12 best procedures as the previous table.
+Winners at N=1024, root SNR 3/5/7:
+  3 Doppler: NSCOPE_SURE_Normal 0.1032690
+  3 HeaviSine: EpanechnikovBayes 0.0466974
+  3 Bumps: NSCOPE_SURE_Normal 0.2242138
+  3 Blocks: HMT_1D_EM_proxy 0.1011610
+  5 Doppler: NSCOPE_SURE_Normal 0.1245764
+  5 HeaviSine: SCOPE_SURE_Normal 0.0572587
+  5 Bumps: NSCOPE_SURE_Normal 0.2342210
+  5 Blocks: HMT_1D_EM_proxy 0.0778530
+  7 Doppler: NeighShrink_SURE_1D 0.1373544
+  7 HeaviSine: BAMS_Author_C2_Gamma2 0.0657369
+  7 Bumps: NSCOPE_Fixed_Normal_r1 0.2426769
+  7 Blocks: HMT_1D_EM_proxy 0.0718060
+
+Normal SCOPE SURE to N-SCOPE SURE normalized Q_N improvements:
+N=512: 10.4254%
+N=1024: 9.6744%
+N=2048: 9.6536%
+
+Q_all Normal SCOPE SURE=0.70452521; N-SCOPE SURE=0.63471097
+After re-estimation, original S5 numeric tables/figures must also be updated if retained.
