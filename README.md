@@ -21,7 +21,7 @@ Both use a Python 3 kernel. Install NumPy, SciPy, pandas, Matplotlib, and Jupyte
 ## Manuscript and supplement
 
 - [Manuscript PDF](manuscript/SCOPE07.pdf) and [LaTeX source](manuscript/SCOPE07.tex).
-- [Supplement02.tex](supplement/Supplement02.tex, SCOPE supplementary material.pdf) gives the penalized-likelihood and MAP interpretation, structural proofs, additional CDF constructions, null-risk calibration and SURE derivatives. It also gives the extended numerical tables for Experiments I–III and the comparator and reproducibility audit.
+- [Supplement02.tex](supplement/Supplement02.tex) gives the penalized-likelihood and MAP interpretation, structural proofs, additional CDF constructions, null-risk calibration and SURE derivatives. It also gives the extended numerical tables for Experiments I–III and the comparator and reproducibility audit.
 
 The supplement is included as the supplied LaTeX source. Its original references.bib and Figs/SCOPE_Mixture_Profiles.pdf were not available for this bundle. The main manuscript source similarly uses external bibliography and figure files. Use the supplied manuscript PDF to read the rendered paper.
 
